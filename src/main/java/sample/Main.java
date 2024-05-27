@@ -3,11 +3,13 @@ package sample;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.List;
 import java.util.Objects;
 
 public class Main extends JFrame {
 
     private JTextArea resultArea; // Natijalarni ko'rsatish uchun JTextArea
+    private JTabbedPane tabbedPane;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -25,7 +27,13 @@ public class Main extends JFrame {
         add(createHeaderPanel(), BorderLayout.NORTH);
         add(new ButtonPanel(this), BorderLayout.WEST); // ButtonPanelni chapga qo'shish
         add(createFooterLabel(), BorderLayout.SOUTH);
-        add(createResultPanel(), BorderLayout.CENTER); // Natijalarni ko'rsatish paneli
+        add(createTabbedPane(), BorderLayout.CENTER); // Natijalarni ko'rsatish paneli
+    }
+
+    private JTabbedPane createTabbedPane() {
+        tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Natijalar", createResultPanel());
+        return tabbedPane;
     }
 
     private JPanel createHeaderPanel() {
@@ -93,13 +101,18 @@ public class Main extends JFrame {
         resultArea = new JTextArea();
         resultArea.setEditable(false);
         resultArea.setFont(new Font("Arial", Font.PLAIN, 15));
-        resultPanel.setBorder(BorderFactory.createTitledBorder("Simulyatsiya Natijalari"));
+        // resultPanel.setBorder(BorderFactory.createTitledBorder("Simulyatsiya Natijalari"));
         resultPanel.setFont(new Font("Arial", Font.PLAIN, 15));
         resultPanel.add(new JScrollPane(resultArea), BorderLayout.CENTER);
         return resultPanel;
     }
 
-    public void displaySimulationResults(String results) {
+    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, List<Double> noiseLevels, List<Integer> noisePowers) {
         resultArea.setText(results);
+        DiagramPanel diagramPanel = new DiagramPanel(amplifierDistances, noiseLevels, noisePowers);
+        tabbedPane.addTab("Diagramma", diagramPanel);
+
+        SchemePanel drawScheme = new SchemePanel(amplifierDistances, networkLength, kchopLength);
+        tabbedPane.addTab("Sxema", drawScheme);
     }
 }

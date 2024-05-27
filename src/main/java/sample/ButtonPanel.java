@@ -121,13 +121,12 @@ public class ButtonPanel extends JPanel {
             int channelsNum = Integer.parseInt(channelsNumField.getText());
 
             simulateOpticalNetwork(networkLength, kchopLength, cableLength, firstSignalSize, lossKoeff, channelsNum);
-            // JOptionPane.showMessageDialog(this, "WDM apparaturali tolali-optik aloqa magistralining tuzilish sxemasi");
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Iltimos, barcha maydonlarni to'g'ri to'ldiring", "Xato", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void simulateOpticalNetwork(double networkLength, double kchopLength, double cableLength,
+    private void simulateOpticalNetwork(int networkLength, int kchopLength, double cableLength,
                                         int firstSignalSize, double lossKoeff, int channelsNum) {
         double alfaEkv = lossKoeff + 0.03 / cableLength;  // so'nish koeff
         double amplifierMaxLength = 29 / alfaEkv;  // kuchaytirgichlarning max masofasi
@@ -145,42 +144,42 @@ public class ButtonPanel extends JPanel {
         }
         amplifierList.add((int) (kchopLength - kuchaytirgichlarSoni1 * ortacha));
 
-        int kuchaytirgichlarSoni2 = (int) ((networkLength - kchopLength)/ortacha);
+        int kuchaytirgichlarSoni2 = (int) ((networkLength - kchopLength) / ortacha);
 
         for (int i = 0; i < kuchaytirgichlarSoni2; i++) {
             amplifierList.add(ortacha);
         }
-        amplifierList.add((int) (networkLength-kchopLength - kuchaytirgichlarSoni2 * ortacha));
+        amplifierList.add((int) (networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha));
         int amplifierNum = amplifierList.size();
-        List<Double>shovqinSathiList = new ArrayList<>();
-        for (int i = 0; i <amplifierNum; i++) {
-            shovqinSathiList.add(-12+(amplifierList.get(i)*alfaEkv+1)-52);
+        List<Double> shovqinSathiList = new ArrayList<>();
+        for (int i = 0; i < amplifierNum; i++) {
+            shovqinSathiList.add(-12 + (amplifierList.get(i) * alfaEkv + 1) - 52);
         }
-        List<Double>shovqinQuvvatiList = new ArrayList<>();
-        for (int i = 0; i <amplifierNum; i++) {
-            shovqinQuvvatiList.add(Math.pow(10,shovqinSathiList.get(i)/10));
+        List<Integer> shovqinQuvvatiList = new ArrayList<>();
+        for (int i = 0; i < amplifierNum; i++) {
+            shovqinQuvvatiList.add((int) Math.floor(Math.pow(10, shovqinSathiList.get(i) / 10) / Math.pow(10, -6)));
         }
         // O'zgaruvchilarni asosiy oynaga chiqarish
         String result = String.format(
-                "So'nish koeffitsiyentining ekvivalent qiymati:  %.2f dB/km\n" +
-                        "Kuchaytirgichlarning maksimal kuchaytirish masofasi:  %.2f - %.2f km\n" +
-                        "Multipleksordan chiqayotgan signal sathi:  %.2f dB\n" +
-                        "Demultipleksor qabul qilayotgan signal sathi:  %.2f dB\n"+
-                        "Jami kuchaytirgichlar soni: %d ta\n\n",
-                alfaEkv, amplifierMinLength, amplifierMaxLength, multiplexerPower, demultiplexerPower,amplifierNum
+                " So'nish koeffitsiyentining ekvivalent qiymati:  %.2f dB/km\n" +
+                        " Kuchaytirgichlarning maksimal kuchaytirish masofasi:  %.2f - %.2f km\n" +
+                        " Multipleksordan chiqayotgan signal sathi:  %.2f dB\n" +
+                        " Demultipleksor qabul qilayotgan signal sathi:  %.2f dB\n" +
+                        " Jami kuchaytirgichlar soni: %d ta\n\n",
+                alfaEkv, amplifierMinLength, amplifierMaxLength, multiplexerPower, demultiplexerPower, amplifierNum
         );
-        result+="Kuchaytirgichlarning kuchaytirish masofalari (km)\n";
-        for (int i = 0; i <amplifierNum; i++) {
-            result+=(i+1)+") "+amplifierList.get(i)+"\n";
+        result += " Kuchaytirgichlarning kuchaytirish masofasi (km)\n";
+        for (int i = 0; i < amplifierNum; i++) {
+            result += " " + (i + 1) + ") " + amplifierList.get(i) + "\n";
         }
-        result+="Kuchaytirgichlarning shovqin sathlari (dBq)\n";
-        for (int i = 0; i <amplifierNum; i++) {
-            result+=(i+1)+") "+shovqinSathiList.get(i)+"\n";
+        result += " Kuchaytirgichlarning shovqin sathlari (dBq)\n";
+        for (int i = 0; i < amplifierNum; i++) {
+            result += " " + (i + 1) + ") " + shovqinSathiList.get(i) + "\n";
         }
-        result+="Kuchaytirgichlarning shovqin quvvati (nVt)\n";
-        for (int i = 0; i <amplifierNum; i++) {
-            result+=(i+1)+") "+shovqinQuvvatiList.get(i)+"\n";
+        result += " Kuchaytirgichlarning shovqin quvvati (nVt)\n";
+        for (int i = 0; i < amplifierNum; i++) {
+            result += " " + (i + 1) + ") " + shovqinQuvvatiList.get(i) + "\n";
         }
-        mainFrame.displaySimulationResults(result); // Natijalarni asosiy oynada ko'rsatish
+        mainFrame.displaySimulationResults(networkLength, kchopLength, result, amplifierList, shovqinSathiList, shovqinQuvvatiList); // Natijalarni asosiy oynada ko'rsatish
     }
 }
