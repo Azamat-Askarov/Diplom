@@ -34,10 +34,10 @@ public class ButtonPanel extends JPanel {
 
     private void addParameterFields(GridBagConstraints gbc) {
         String[] labels = {
-                "Kuchaytirish uchastkasining maksimal uzunligi (km)",
+                "Liniya traktining uzunligi (km)",
                 "Kirish chiqish oraliq punktigacha masofa (km)",
                 "Kabelning qurilish uzunligi (km)",
-                "Optik signalning boshlang'ich uzunligi (nm)",
+                "Optik signalning to'lqin uzunligi (nm)",
                 "Tolaning so'nish koeffitsiyenti (db/km)",
                 "Optik kanallar soni"
         };

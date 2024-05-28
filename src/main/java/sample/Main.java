@@ -72,7 +72,7 @@ public class Main extends JFrame {
     }
 
     private JLabel createHeaderLabel() {
-        JLabel headerLabel = new JLabel("WDM texnologiyali optik transport aloqa tarmog’ini modellashtirish", JLabel.CENTER);
+        JLabel headerLabel = new JLabel("WDM texnologiyali optik transport aloqa tarmog'ini modellashtirish", JLabel.CENTER);
         headerLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
         headerLabel.setOpaque(true);
         headerLabel.setBackground(Color.WHITE);

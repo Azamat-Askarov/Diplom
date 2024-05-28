@@ -2,23 +2,30 @@ package sample;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.List;
 
-public class SchemePanel extends JPanel {
+public class SchemePanel extends JPanel implements MouseWheelListener {
     private List<Integer> amplifierDistances;
     private int distance;
     private int kchopDistance;
+    private double scaleFactor = 1.0;
 
     public SchemePanel(List<Integer> amplifierDistances, int distance, int kchopDistance) {
         this.amplifierDistances = amplifierDistances;
         this.distance = distance;
         this.kchopDistance = kchopDistance;
+        addMouseWheelListener(this);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.scale(scaleFactor, scaleFactor);
         g.setColor(Color.BLACK);
+        g.setFont(new Font("Times New Roman", Font.BOLD, 14 ));
 
         // Multiplekser va demultiplekserlar
         int width = getWidth();
@@ -27,7 +34,7 @@ public class SchemePanel extends JPanel {
         int rectHeight = height / 5;
         int arrowWidth = width / 20;
         int arrowHeight = height / 15;
-        int startX = width / 20;
+        int startX = 10 + (width / 20);
         int endX = width - (width / 20) - rectWidth;
 
         // Multiplekser
@@ -48,15 +55,15 @@ public class SchemePanel extends JPanel {
         for (int i = 0; i < amplifierDistances.size(); i++) {
             int segmentLength = (endX - startX - rectWidth) * amplifierDistances.get(i) / distance;
             currentX += segmentLength;
-            drawAmplifier(g, currentX - segmentLength + 60, lineY, arrowWidth, arrowHeight, i + 1);
+            drawAmplifier(g, currentX - segmentLength + 40, lineY, arrowWidth, arrowHeight, i + 1);
             g.drawString(amplifierDistances.get(i) + " km", currentX - segmentLength / 2, lineY + 20);
         }
 
         // Aylanakchop
         if (kchopDistance > 0) {  // Only draw the kchop if the distance is valid
-            int antennaX = rectWidth + startX + (endX - startX - rectWidth) * kchopDistance / distance;
-            drawAntenna(g, antennaX, lineY, 30); // 30 is the diameter of the antenna
-            g.drawString("KCHOP", antennaX - 15, lineY + 50);
+            int kchopX = rectWidth + startX + (endX - startX - rectWidth) * kchopDistance / distance;
+            drawAntenna(g, kchopX, lineY, 30); // 30 is the diameter of the antenna
+            g.drawString("KCHOP", kchopX - 15, lineY + 50);
         }
     }
 
@@ -118,5 +125,14 @@ public class SchemePanel extends JPanel {
             g.drawString("λ " + (i + 1), x + width + lineLength + 10, lineY + 5);
         }
     }
-}
 
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+            scaleFactor += -e.getUnitsToScroll() * 0.1;
+            scaleFactor = Math.max(0.1, scaleFactor); // Prevent scaleFactor from becoming too small
+            revalidate();
+            repaint();
+        }
+    }
+}
