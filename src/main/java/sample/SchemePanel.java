@@ -60,11 +60,15 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
         }
 
         // Aylanakchop
-        if (kchopDistance > 0) {  // Only draw the kchop if the distance is valid
+        if (kchopDistance > 0) {  // Shunchaki masofa haqiqiy bo'lsa
             int kchopX = rectWidth + startX + (endX - startX - rectWidth) * kchopDistance / distance;
-            drawAntenna(g, kchopX, lineY, 30); // 30 is the diameter of the antenna
-            g.drawString("KCHOP", kchopX - 15, lineY + 50);
+            int kchopHeight = height / 8; // Chiziqning bo'yi (uzunligi)
+            drawKchop(g, kchopX-23, lineY -45, rectWidth / 2, kchopHeight); // Aylanakchopni chizish
+            g.drawString("KCHOP", kchopX-40, lineY + 50);
         }
+
+
+
     }
 
     private void drawTrapezoid(Graphics g, int x, int y, int width, int height, boolean isLeft) {
@@ -78,6 +82,7 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
             trapezoid.addPoint(x, y + (height / 4));
             trapezoid.addPoint(x + width, y);
             trapezoid.addPoint(x + width, y + height);
+
             trapezoid.addPoint(x, y + (height * 3 / 4));
         }
         g.drawPolygon(trapezoid);
@@ -90,9 +95,15 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
         g.drawString(String.valueOf(number), x - 3, y - height / 2 - 5);
     }
 
-    private void drawAntenna(Graphics g, int x, int y, int diameter) {
-        g.drawOval(x - diameter / 2, y - diameter / 2, diameter, diameter);
+    private void drawKchop(Graphics g, int x, int y, int width, int height) {
+        g.drawRect(x, y + height / 4, width, height / 2); // Pastroqqa tushiramiz
     }
+
+
+
+
+
+
 
     private void drawMultiplexerInputs(Graphics g, int x, int y, int width, int height) {
         int lineLength = 20; // Length of the horizontal lines
