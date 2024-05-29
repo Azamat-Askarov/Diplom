@@ -128,32 +128,42 @@ public class ButtonPanel extends JPanel {
 
     private void simulateOpticalNetwork(int networkLength, int kchopLength, double cableLength,
                                         int firstSignalSize, double lossKoeff, int channelsNum) {
-        double alfaEkv = lossKoeff + 0.03 / cableLength;  // so'nish koeff
+        double alfaEkv = lossKoeff + (0.03 / cableLength);  // so'nish koeff
         double amplifierMaxLength = 29 / alfaEkv;  // kuchaytirgichlarning max masofasi
         double amplifierMinLength = 24 / alfaEkv;  // kuchaytirgichlarning min masofasi
         double multiplexerPower = 20 - 10 * Math.log10(channelsNum); // multipleksordan chiqayotgan signal sathi
         double demultiplexerPower = multiplexerPower - 12;  // demultipleksorga kirayotgan signal sathi
 
         int ortacha = (int) (amplifierMaxLength + amplifierMinLength) / 2;
-        int kuchaytirgichlarSoni1 = (int) kchopLength / ortacha;
+        int kuchaytirgichlarSoni1 = kchopLength / ortacha;
 
         List<Integer> amplifierList = new ArrayList<>();
 
         for (int i = 0; i < kuchaytirgichlarSoni1; i++) {
             amplifierList.add(ortacha);
         }
-        amplifierList.add((int) (kchopLength - kuchaytirgichlarSoni1 * ortacha));
-
+        if (kchopLength - kuchaytirgichlarSoni1 * ortacha != 0) {
+            amplifierList.add((int) (kchopLength - kuchaytirgichlarSoni1 * ortacha));
+        }
         int kuchaytirgichlarSoni2 = (int) ((networkLength - kchopLength) / ortacha);
 
-        for (int i = 0; i < kuchaytirgichlarSoni2; i++) {
-            amplifierList.add(ortacha);
+        if ((networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha) <= ortacha) {
+            kuchaytirgichlarSoni2++;
+            ortacha = (networkLength - kchopLength) / kuchaytirgichlarSoni2;
+            for (int i = 0; i < kuchaytirgichlarSoni2 - 1; i++) {
+                amplifierList.add(ortacha);
+            }
+            amplifierList.add((networkLength - kchopLength - (kuchaytirgichlarSoni2 - 1) * ortacha));
+        } else {
+            for (int i = 0; i < kuchaytirgichlarSoni2; i++) {
+                amplifierList.add(ortacha);
+            }
+            amplifierList.add((int) (networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha));
         }
-        amplifierList.add((int) (networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha));
         int amplifierNum = amplifierList.size();
         List<Double> shovqinSathiList = new ArrayList<>();
         for (int i = 0; i < amplifierNum; i++) {
-            shovqinSathiList.add(-12 + (amplifierList.get(i) * alfaEkv + 1) - 52);
+            shovqinSathiList.add(amplifierList.get(i) * alfaEkv - 63);
         }
         List<Integer> shovqinQuvvatiList = new ArrayList<>();
         for (int i = 0; i < amplifierNum; i++) {

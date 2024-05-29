@@ -59,15 +59,13 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
             g.drawString(amplifierDistances.get(i) + " km", currentX - segmentLength / 2, lineY + 20);
         }
 
-        // Aylanakchop
+        // kchop
         if (kchopDistance > 0) {  // Shunchaki masofa haqiqiy bo'lsa
             int kchopX = rectWidth + startX + (endX - startX - rectWidth) * kchopDistance / distance;
             int kchopHeight = height / 8; // Chiziqning bo'yi (uzunligi)
             drawKchop(g, kchopX-23, lineY -45, rectWidth / 2, kchopHeight); // Aylanakchopni chizish
             g.drawString("KCHOP", kchopX-40, lineY + 50);
         }
-
-
 
     }
 
@@ -98,12 +96,6 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
     private void drawKchop(Graphics g, int x, int y, int width, int height) {
         g.drawRect(x, y + height / 4, width, height / 2); // Pastroqqa tushiramiz
     }
-
-
-
-
-
-
 
     private void drawMultiplexerInputs(Graphics g, int x, int y, int width, int height) {
         int lineLength = 20; // Length of the horizontal lines

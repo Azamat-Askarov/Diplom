@@ -72,7 +72,7 @@ public class Main extends JFrame {
     }
 
     private JLabel createHeaderLabel() {
-        JLabel headerLabel = new JLabel("WDM texnologiyali optik transport aloqa tarmog'ini modellashtirish", JLabel.CENTER);
+        JLabel headerLabel = new JLabel("WDM texnologiyali optik transport aloqa tarmog’ini modellashtirish", JLabel.CENTER);
         headerLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
         headerLabel.setOpaque(true);
         headerLabel.setBackground(Color.WHITE);
@@ -101,7 +101,6 @@ public class Main extends JFrame {
         resultArea = new JTextArea();
         resultArea.setEditable(false);
         resultArea.setFont(new Font("Arial", Font.PLAIN, 15));
-        // resultPanel.setBorder(BorderFactory.createTitledBorder("Simulyatsiya Natijalari"));
         resultPanel.setFont(new Font("Arial", Font.PLAIN, 15));
         resultPanel.add(new JScrollPane(resultArea), BorderLayout.CENTER);
         return resultPanel;
@@ -109,9 +108,22 @@ public class Main extends JFrame {
 
     public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, List<Double> noiseLevels, List<Integer> noisePowers) {
         resultArea.setText(results);
+
+        // Remove old "Diagramma" tab if it exists
+        int diagramIndex = tabbedPane.indexOfTab("Diagramma");
+        if (diagramIndex != -1) {
+            tabbedPane.removeTabAt(diagramIndex);
+        }
+        // Add new "Diagramma" tab
         DiagramPanel diagramPanel = new DiagramPanel(amplifierDistances, noiseLevels, noisePowers);
         tabbedPane.addTab("Diagramma", diagramPanel);
 
+        // Remove old "Sxema" tab if it exists
+        int schemeIndex = tabbedPane.indexOfTab("Sxema");
+        if (schemeIndex != -1) {
+            tabbedPane.removeTabAt(schemeIndex);
+        }
+        // Add new "Sxema" tab
         SchemePanel drawScheme = new SchemePanel(amplifierDistances, networkLength, kchopLength);
         tabbedPane.addTab("Sxema", drawScheme);
     }
