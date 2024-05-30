@@ -134,20 +134,27 @@ public class ButtonPanel extends JPanel {
         double multiplexerPower = 20 - 10 * Math.log10(channelsNum); // multipleksordan chiqayotgan signal sathi
         double demultiplexerPower = multiplexerPower - 12;  // demultipleksorga kirayotgan signal sathi
 
-        int ortacha = (int) (amplifierMaxLength + amplifierMinLength) / 2;
-        int kuchaytirgichlarSoni1 = kchopLength / ortacha;
-
         List<Integer> amplifierList = new ArrayList<>();
 
-        for (int i = 0; i < kuchaytirgichlarSoni1; i++) {
-            amplifierList.add(ortacha);
+        int ortacha = (int) (amplifierMaxLength + amplifierMinLength) / 2;
+        int kuchaytirgichlarSoni1 = kchopLength / ortacha;
+        if (kchopLength - kuchaytirgichlarSoni1 * ortacha <= ortacha / 2) {
+            kuchaytirgichlarSoni1++;
+            ortacha = kchopLength / kuchaytirgichlarSoni1;
+            for (int i = 0; i < kuchaytirgichlarSoni1 - 1; i++) {
+                amplifierList.add(ortacha);
+            }
+            amplifierList.add((kchopLength - (kuchaytirgichlarSoni1 - 1) * ortacha));
+        } else {
+            for (int i = 0; i < kuchaytirgichlarSoni1; i++) {
+                amplifierList.add(ortacha);
+            }
+            amplifierList.add((kchopLength - kuchaytirgichlarSoni1 * ortacha));
         }
-        if (kchopLength - kuchaytirgichlarSoni1 * ortacha != 0) {
-            amplifierList.add((int) (kchopLength - kuchaytirgichlarSoni1 * ortacha));
-        }
-        int kuchaytirgichlarSoni2 = (int) ((networkLength - kchopLength) / ortacha);
 
-        if ((networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha) <= ortacha) {
+        int kuchaytirgichlarSoni2 = ((networkLength - kchopLength) / ortacha);
+
+        if ((networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha) <= ortacha / 2) {
             kuchaytirgichlarSoni2++;
             ortacha = (networkLength - kchopLength) / kuchaytirgichlarSoni2;
             for (int i = 0; i < kuchaytirgichlarSoni2 - 1; i++) {
@@ -158,7 +165,7 @@ public class ButtonPanel extends JPanel {
             for (int i = 0; i < kuchaytirgichlarSoni2; i++) {
                 amplifierList.add(ortacha);
             }
-            amplifierList.add((int) (networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha));
+            amplifierList.add((networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha));
         }
         int amplifierNum = amplifierList.size();
         List<Double> shovqinSathiList = new ArrayList<>();
