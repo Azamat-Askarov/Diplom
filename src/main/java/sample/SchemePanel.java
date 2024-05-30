@@ -101,32 +101,36 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
         int lineLength = 20; // Length of the horizontal lines
         int spacing = height / 5; // Space between the lines
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             int lineY = y + (spacing * (i + 1));
             g.drawLine(x - lineLength, lineY, x, lineY);
         }
+        g.drawLine(x - lineLength, y + (spacing * 4), x, y + (spacing * 4));
 
         // Labeling the inputs
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             int lineY = y + (spacing * (i + 1));
             g.drawString("λ " + (i + 1), x - lineLength - 40, lineY + 5);
         }
+        g.drawString("λ n", x - lineLength - 40, y + (spacing * 4) + 5);
     }
 
     private void drawDemultiplexerOutputs(Graphics g, int x, int y, int width, int height) {
         int lineLength = 20; // Length of the horizontal lines
         int spacing = height / 5; // Space between the lines
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             int lineY = y + (spacing * (i + 1));
             g.drawLine(x + width, lineY, x + width + lineLength, lineY);
         }
+        g.drawLine(x + width, y + (spacing * 4), x + width + lineLength, y + (spacing * 4));
 
         // Labeling the outputs
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             int lineY = y + (spacing * (i + 1));
             g.drawString("λ " + (i + 1), x + width + lineLength + 10, lineY + 5);
         }
+        g.drawString("λ n", x + width + lineLength + 10, y + (spacing * 4) + 5);
     }
 
     @Override
