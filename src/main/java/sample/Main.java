@@ -60,7 +60,7 @@ public class Main extends JFrame {
         logoPanel.setBorder(new LineBorder(Color.GREEN, 1, true));
 
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.add(logoPanel, BorderLayout.WEST);
+        headerPanel.add(logoPanel, BorderLayout.CENTER);
         return headerPanel;
     }
 
@@ -72,7 +72,7 @@ public class Main extends JFrame {
     }
 
     private JLabel createHeaderLabel() {
-        JLabel headerLabel = new JLabel("WDM texnologiyali optik transport aloqa tarmog’ini modellashtirish", JLabel.CENTER);
+        JLabel headerLabel = new JLabel("WDM texnologiyali optik transport aloqa tarmog'ini modellashtirish", JLabel.CENTER);
         headerLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
         headerLabel.setOpaque(true);
         headerLabel.setBackground(Color.WHITE);
@@ -106,7 +106,7 @@ public class Main extends JFrame {
         return resultPanel;
     }
 
-    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, int kchopAmplifier, List<Double> noiseLevels, List<Integer> noisePowers) {
+    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, int kchopAmplifier, List<Double> noiseLevels, List<Integer> noisePowers, int opticalChannelsNum) {
         resultArea.setText(results);
 
         // Remove old "Diagramma" tab if it exists
@@ -124,7 +124,7 @@ public class Main extends JFrame {
             tabbedPane.removeTabAt(schemeIndex);
         }
         // Add new "Sxema" tab
-        SchemePanel drawScheme = new SchemePanel(amplifierDistances, networkLength, kchopLength, kchopAmplifier);
+        SchemePanel drawScheme = new SchemePanel(amplifierDistances, networkLength, kchopLength, kchopAmplifier, opticalChannelsNum);
         tabbedPane.addTab("Sxema", drawScheme);
     }
 }

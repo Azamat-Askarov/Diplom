@@ -199,6 +199,6 @@ public class ButtonPanel extends JPanel {
         for (int i = 0; i < amplifierNum; i++) {
             result += " " + (i + 1) + ") " + shovqinQuvvatiList.get(i) + "\n";
         }
-        mainFrame.displaySimulationResults(networkLength, kchopLength, result, amplifierList, kuchaytirgichlarSoni1 + 1, shovqinSathiList, shovqinQuvvatiList); // Natijalarni asosiy oynada ko'rsatish
+        mainFrame.displaySimulationResults(networkLength, kchopLength, result, amplifierList, kuchaytirgichlarSoni1 + 1, shovqinSathiList, shovqinQuvvatiList,channelsNum); // Natijalarni asosiy oynada ko'rsatish
     }
 }
