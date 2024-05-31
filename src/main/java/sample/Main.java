@@ -106,7 +106,7 @@ public class Main extends JFrame {
         return resultPanel;
     }
 
-    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, List<Double> noiseLevels, List<Integer> noisePowers) {
+    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, int kchopAmplifier, List<Double> noiseLevels, List<Integer> noisePowers) {
         resultArea.setText(results);
 
         // Remove old "Diagramma" tab if it exists
@@ -124,7 +124,7 @@ public class Main extends JFrame {
             tabbedPane.removeTabAt(schemeIndex);
         }
         // Add new "Sxema" tab
-        SchemePanel drawScheme = new SchemePanel(amplifierDistances, networkLength, kchopLength);
+        SchemePanel drawScheme = new SchemePanel(amplifierDistances, networkLength, kchopLength, kchopAmplifier);
         tabbedPane.addTab("Sxema", drawScheme);
     }
 }

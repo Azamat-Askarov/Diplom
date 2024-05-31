@@ -11,11 +11,13 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
     private int distance;
     private int kchopDistance;
     private double scaleFactor = 1.0;
+    int kchopAmplifier;
 
-    public SchemePanel(List<Integer> amplifierDistances, int distance, int kchopDistance) {
+    public SchemePanel(List<Integer> amplifierDistances, int distance, int kchopDistance, int kchopAmplifier) {
         this.amplifierDistances = amplifierDistances;
         this.distance = distance;
         this.kchopDistance = kchopDistance;
+        this.kchopAmplifier = kchopAmplifier;
         addMouseWheelListener(this);
     }
 
@@ -90,10 +92,10 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
         int[] xPoints = {x - width / 2, x + width / 2, x - width / 2};
         int[] yPoints = {y - height / 2, y, y + height / 2};
         g.drawPolygon(xPoints, yPoints, 3);
-        if (number == 1) {
-            g.drawString(String.valueOf(number) + " QK", x - 3, y - height / 2 - 5);
+        if (number == 1 || number == kchopAmplifier) {
+            g.drawString("QK", x - 3, y - height / 2 - 5);
         } else {
-            g.drawString(String.valueOf(number) + " EDFA", x - 3, y - height / 2 - 5);
+            g.drawString("EDFA", x - 3, y - height / 2 - 5);
         }
     }
 

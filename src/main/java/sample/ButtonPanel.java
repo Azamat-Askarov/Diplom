@@ -60,7 +60,7 @@ public class ButtonPanel extends JPanel {
             add(fields[i], gbc);
         }
         // "Optik signalning boshlang'ich uzunligi" uchun kiritilishi kerak bo'lgan qiymatlar ro'yxati
-        String[] firstSignalLengthSuggestion = {"25","26","27","28","29","30"};
+        String[] firstSignalLengthSuggestion = {"25", "26", "27", "28", "29", "30"};
         JComboBox<String> suggestedValuesComboBox = new JComboBox<>(firstSignalLengthSuggestion);
         suggestedValuesComboBox.addActionListener(new ActionListener() {
             @Override
@@ -129,42 +129,44 @@ public class ButtonPanel extends JPanel {
     private void simulateOpticalNetwork(int networkLength, int kchopLength, double cableLength,
                                         int amplifierValue, double lossKoeff, int channelsNum) {
         double alfaEkv = lossKoeff + (0.03 / cableLength);  // so'nish koeff
-        double amplifierMaxLength = (amplifierValue-1) / alfaEkv;  // kuchaytirgichlarning max masofasi
+        double amplifierMaxLength = (amplifierValue - 1) / alfaEkv;  // kuchaytirgichlarning max masofasi
         double multiplexerPower = 20 - (10 * Math.log10(channelsNum)); // multipleksordan chiqayotgan signal sathi
         double demultiplexerPower = multiplexerPower - 12;  // demultipleksorga kirayotgan signal sathi
 
         List<Integer> amplifierList = new ArrayList<>();
 
-        int kuchaytirgichlarSoni1 = (int) ( kchopLength / amplifierMaxLength);
+        int kuchaytirgichlarSoni1 = (int) (kchopLength / amplifierMaxLength);
         int ortacha1;
-        if(kchopLength-kuchaytirgichlarSoni1*(int)amplifierMaxLength<=amplifierMaxLength/2){
+        if (kchopLength - kuchaytirgichlarSoni1 * (int) amplifierMaxLength <= amplifierMaxLength / 2) {
             kuchaytirgichlarSoni1++;
             ortacha1 = kchopLength / kuchaytirgichlarSoni1;
             for (int i = 0; i < kuchaytirgichlarSoni1 - 1; i++) {
                 amplifierList.add(ortacha1);
             }
             amplifierList.add((kchopLength - (kuchaytirgichlarSoni1 - 1) * ortacha1));
-        }else{
+        } else {
             for (int i = 0; i < kuchaytirgichlarSoni1; i++) {
                 amplifierList.add((int) amplifierMaxLength);
             }
-            amplifierList.add((kchopLength - kuchaytirgichlarSoni1 * (int)amplifierMaxLength));
+            amplifierList.add((kchopLength - kuchaytirgichlarSoni1 * (int) amplifierMaxLength));
+            kuchaytirgichlarSoni1++;
         }
 
-        int kuchaytirgichlarSoni2 = (int) ( (networkLength-kchopLength) / amplifierMaxLength);
+        int kuchaytirgichlarSoni2 = (int) ((networkLength - kchopLength) / amplifierMaxLength);
         int ortacha2;
-        if(networkLength-kchopLength-kuchaytirgichlarSoni2*(int)amplifierMaxLength<=amplifierMaxLength/2){
+        if (networkLength - kchopLength - kuchaytirgichlarSoni2 * (int) amplifierMaxLength <= amplifierMaxLength / 2) {
             kuchaytirgichlarSoni2++;
-            ortacha2 = (networkLength-kchopLength) / kuchaytirgichlarSoni2;
+            ortacha2 = (networkLength - kchopLength) / kuchaytirgichlarSoni2;
             for (int i = 0; i < kuchaytirgichlarSoni2 - 1; i++) {
                 amplifierList.add(ortacha2);
             }
-            amplifierList.add((networkLength-kchopLength - (kuchaytirgichlarSoni2 - 1) * ortacha2));
-        }else{
+            amplifierList.add((networkLength - kchopLength - (kuchaytirgichlarSoni2 - 1) * ortacha2));
+        } else {
             for (int i = 0; i < kuchaytirgichlarSoni2; i++) {
                 amplifierList.add((int) amplifierMaxLength);
             }
-            amplifierList.add( (networkLength-kchopLength - kuchaytirgichlarSoni2 * (int)amplifierMaxLength));
+            amplifierList.add((networkLength - kchopLength - kuchaytirgichlarSoni2 * (int) amplifierMaxLength));
+            kuchaytirgichlarSoni2++;
         }
 
         int amplifierNum = amplifierList.size();
@@ -197,6 +199,6 @@ public class ButtonPanel extends JPanel {
         for (int i = 0; i < amplifierNum; i++) {
             result += " " + (i + 1) + ") " + shovqinQuvvatiList.get(i) + "\n";
         }
-        mainFrame.displaySimulationResults(networkLength, kchopLength, result, amplifierList, shovqinSathiList, shovqinQuvvatiList); // Natijalarni asosiy oynada ko'rsatish
+        mainFrame.displaySimulationResults(networkLength, kchopLength, result, amplifierList, kuchaytirgichlarSoni1 + 1, shovqinSathiList, shovqinQuvvatiList); // Natijalarni asosiy oynada ko'rsatish
     }
 }
