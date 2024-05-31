@@ -25,7 +25,7 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.scale(scaleFactor, scaleFactor);
         g.setColor(Color.BLACK);
-        g.setFont(new Font("Times New Roman", Font.BOLD, 14 ));
+        g.setFont(new Font("Times New Roman", Font.BOLD, 14));
 
         // Multiplekser va demultiplekserlar
         int width = getWidth();
@@ -63,8 +63,8 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
         if (kchopDistance > 0) {  // Shunchaki masofa haqiqiy bo'lsa
             int kchopX = rectWidth + startX + (endX - startX - rectWidth) * kchopDistance / distance;
             int kchopHeight = height / 8; // Chiziqning bo'yi (uzunligi)
-            drawKchop(g, kchopX-23, lineY -45, rectWidth / 2, kchopHeight); // Aylanakchopni chizish
-            g.drawString("KCHOP", kchopX-40, lineY + 50);
+            drawKchop(g, kchopX - 23, lineY - 45, rectWidth / 2, kchopHeight); // Aylanakchopni chizish
+            g.drawString("KCHOP", kchopX - 40, lineY + 50);
         }
 
     }
@@ -90,7 +90,11 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
         int[] xPoints = {x - width / 2, x + width / 2, x - width / 2};
         int[] yPoints = {y - height / 2, y, y + height / 2};
         g.drawPolygon(xPoints, yPoints, 3);
-        g.drawString(String.valueOf(number), x - 3, y - height / 2 - 5);
+        if (number == 1) {
+            g.drawString(String.valueOf(number) + " QK", x - 3, y - height / 2 - 5);
+        } else {
+            g.drawString(String.valueOf(number) + " EDFA", x - 3, y - height / 2 - 5);
+        }
     }
 
     private void drawKchop(Graphics g, int x, int y, int width, int height) {

@@ -11,7 +11,7 @@ public class ButtonPanel extends JPanel {
     private JTextField networkLengthField;
     private JTextField kchopLengthField;
     private JTextField cableLengthField;
-    private JTextField firstSignalSizeField;
+    private JTextField amplifierValueField;
     private JTextField lossKoeffField;
     private JTextField channelsNumField;
     private Main mainFrame; // Main frame uchun
@@ -37,7 +37,7 @@ public class ButtonPanel extends JPanel {
                 "Liniya traktining uzunligi (km)",
                 "Kirish chiqish oraliq punktigacha masofa (km)",
                 "Kabelning qurilish uzunligi (km)",
-                "Optik signalning to'lqin uzunligi (nm)",
+                "Kuchaytirgichning kuchaytirish sathi (dB)",
                 "Tolaning so'nish koeffitsiyenti (db/km)",
                 "Optik kanallar soni"
         };
@@ -46,7 +46,7 @@ public class ButtonPanel extends JPanel {
                 networkLengthField = new JTextField(),
                 kchopLengthField = new JTextField(),
                 cableLengthField = new JTextField(),
-                firstSignalSizeField = new JTextField(),
+                amplifierValueField = new JTextField(),
                 lossKoeffField = new JTextField(),
                 channelsNumField = new JTextField()
         };
@@ -60,17 +60,17 @@ public class ButtonPanel extends JPanel {
             add(fields[i], gbc);
         }
         // "Optik signalning boshlang'ich uzunligi" uchun kiritilishi kerak bo'lgan qiymatlar ro'yxati
-        String[] firstSignalLengthSuggestion = {"1530", "1535", "1540", "1545", "1550", "1555", "1560"};
+        String[] firstSignalLengthSuggestion = {"25","26","27","28","29","30"};
         JComboBox<String> suggestedValuesComboBox = new JComboBox<>(firstSignalLengthSuggestion);
         suggestedValuesComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedValue = (String) suggestedValuesComboBox.getSelectedItem();
-                firstSignalSizeField.setText(selectedValue);
+                amplifierValueField.setText(selectedValue);
             }
         });
         gbc.gridx = 2;
-        gbc.gridy = 3; // "Optik signalning boshlang'ich uzunligi" nomli maydon
+        gbc.gridy = 3; // "Kuchaytirgichning kuchaytirish qobiliyati" nomli maydon
         add(suggestedValuesComboBox, gbc);
 
         // "Tolaning so'nish koeffitsiyenti" uchun kiritilishi kerak bo'lgan qiymatlar ro'yxati
@@ -116,58 +116,57 @@ public class ButtonPanel extends JPanel {
             int networkLength = Integer.parseInt(networkLengthField.getText());
             int kchopLength = Integer.parseInt(kchopLengthField.getText());
             double cableLength = Double.parseDouble(cableLengthField.getText());
-            int firstSignalSize = Integer.parseInt(firstSignalSizeField.getText());
+            int amplifierValue = Integer.parseInt(amplifierValueField.getText());
             double lossKoeff = Double.parseDouble(lossKoeffField.getText()); // O'zgartirilgan nom
             int channelsNum = Integer.parseInt(channelsNumField.getText());
 
-            simulateOpticalNetwork(networkLength, kchopLength, cableLength, firstSignalSize, lossKoeff, channelsNum);
+            simulateOpticalNetwork(networkLength, kchopLength, cableLength, amplifierValue, lossKoeff, channelsNum);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Iltimos, barcha maydonlarni to'g'ri to'ldiring", "Xato", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void simulateOpticalNetwork(int networkLength, int kchopLength, double cableLength,
-                                        int firstSignalSize, double lossKoeff, int channelsNum) {
+                                        int amplifierValue, double lossKoeff, int channelsNum) {
         double alfaEkv = lossKoeff + (0.03 / cableLength);  // so'nish koeff
-        double amplifierMaxLength = 29 / alfaEkv;  // kuchaytirgichlarning max masofasi
-        double amplifierMinLength = 24 / alfaEkv;  // kuchaytirgichlarning min masofasi
-        double multiplexerPower = 20 - 10 * Math.log10(channelsNum); // multipleksordan chiqayotgan signal sathi
+        double amplifierMaxLength = (amplifierValue-1) / alfaEkv;  // kuchaytirgichlarning max masofasi
+        double multiplexerPower = 20 - (10 * Math.log10(channelsNum)); // multipleksordan chiqayotgan signal sathi
         double demultiplexerPower = multiplexerPower - 12;  // demultipleksorga kirayotgan signal sathi
 
         List<Integer> amplifierList = new ArrayList<>();
 
-        int ortacha1 = ((int) (amplifierMinLength + 3*amplifierMaxLength)/4);
-        int kuchaytirgichlarSoni1 = kchopLength / ortacha1;
-        if (kchopLength - kuchaytirgichlarSoni1 * ortacha1 <= ortacha1 / 2) {
+        int kuchaytirgichlarSoni1 = (int) ( kchopLength / amplifierMaxLength);
+        int ortacha1;
+        if(kchopLength-kuchaytirgichlarSoni1*(int)amplifierMaxLength<=amplifierMaxLength/2){
             kuchaytirgichlarSoni1++;
             ortacha1 = kchopLength / kuchaytirgichlarSoni1;
             for (int i = 0; i < kuchaytirgichlarSoni1 - 1; i++) {
                 amplifierList.add(ortacha1);
             }
             amplifierList.add((kchopLength - (kuchaytirgichlarSoni1 - 1) * ortacha1));
-        } else {
+        }else{
             for (int i = 0; i < kuchaytirgichlarSoni1; i++) {
-                amplifierList.add(ortacha1);
+                amplifierList.add((int) amplifierMaxLength);
             }
-            amplifierList.add((kchopLength - kuchaytirgichlarSoni1 * ortacha1));
+            amplifierList.add((kchopLength - kuchaytirgichlarSoni1 * (int)amplifierMaxLength));
         }
 
-        int ortacha2 = ((int) (amplifierMinLength + 3*amplifierMaxLength)/4);
-        int kuchaytirgichlarSoni2 = ((networkLength - kchopLength) / ortacha2);
-
-        if ((networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha2) <= ortacha2 / 2) {
+        int kuchaytirgichlarSoni2 = (int) ( (networkLength-kchopLength) / amplifierMaxLength);
+        int ortacha2;
+        if(networkLength-kchopLength-kuchaytirgichlarSoni2*(int)amplifierMaxLength<=amplifierMaxLength/2){
             kuchaytirgichlarSoni2++;
-            ortacha2 = (networkLength - kchopLength) / kuchaytirgichlarSoni2;
+            ortacha2 = (networkLength-kchopLength) / kuchaytirgichlarSoni2;
             for (int i = 0; i < kuchaytirgichlarSoni2 - 1; i++) {
                 amplifierList.add(ortacha2);
             }
-            amplifierList.add((networkLength - kchopLength - (kuchaytirgichlarSoni2 - 1) * ortacha2));
-        } else {
+            amplifierList.add((networkLength-kchopLength - (kuchaytirgichlarSoni2 - 1) * ortacha2));
+        }else{
             for (int i = 0; i < kuchaytirgichlarSoni2; i++) {
-                amplifierList.add(ortacha2);
+                amplifierList.add((int) amplifierMaxLength);
             }
-            amplifierList.add((networkLength - kchopLength - kuchaytirgichlarSoni2 * ortacha2));
+            amplifierList.add( (networkLength-kchopLength - kuchaytirgichlarSoni2 * (int)amplifierMaxLength));
         }
+
         int amplifierNum = amplifierList.size();
         List<Double> shovqinSathiList = new ArrayList<>();
         for (int i = 0; i < amplifierNum; i++) {
@@ -180,11 +179,11 @@ public class ButtonPanel extends JPanel {
         // O'zgaruvchilarni asosiy oynaga chiqarish
         String result = String.format(
                 " So'nish koeffitsiyentining ekvivalent qiymati:  %.2f dB/km\n" +
-                        " Kuchaytirgichlarning maksimal kuchaytirish masofasi:  %.2f - %.2f km\n" +
+                        " Kuchaytirgichlarning maksimal kuchaytirish masofasi:  %.2f km\n" +
                         " Multipleksordan chiqayotgan signal sathi:  %.2f dB\n" +
                         " Demultipleksor qabul qilayotgan signal sathi:  %.2f dB\n" +
                         " Jami kuchaytirgichlar soni: %d ta\n\n",
-                alfaEkv, amplifierMinLength, amplifierMaxLength, multiplexerPower, demultiplexerPower, amplifierNum
+                alfaEkv, amplifierMaxLength, multiplexerPower, demultiplexerPower, amplifierNum
         );
         result += " Kuchaytirgichlarning kuchaytirish masofasi (km)\n";
         for (int i = 0; i < amplifierNum; i++) {
