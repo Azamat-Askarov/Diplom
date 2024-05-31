@@ -102,7 +102,9 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
     }
 
     private void drawKchop(Graphics g, int x, int y, int width, int height) {
-        g.drawRect(x, y + height / 4, width, height / 2); // Pastroqqa tushiramiz
+        int spacing = height / 8; // Multiplekser va demultiplekserlar orasidagi bo'shliqni kamaytirish
+        drawTrapezoid(g, x + width + spacing - 32, y, width, height, true); // Adjusted x coordinate by subtracting 30
+        drawTrapezoid(g, x - 32, y, width, height, false); // Adjusted x coordinate by subtracting 30
     }
 
     private void drawMultiplexerInputs(Graphics g, int x, int y, int width, int height,int opticalChannelsNum) {
