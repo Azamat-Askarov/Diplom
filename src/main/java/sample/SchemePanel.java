@@ -73,13 +73,11 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
         // Set font for the title
         g.setFont(new Font("Times New Roman", Font.PLAIN, 18));
         FontMetrics fm = g.getFontMetrics();
-        int titleWidth = fm.stringWidth("Optik kanalning sath diagrammasi");
+        int titleWidth = fm.stringWidth("WDM texnologiyali optik transport aloqa tarmog'i modeli");
         // Draw the title
         int titleX = (width - titleWidth) / 2;
         int titleY =fm.getHeight() + 10;
-        g.drawString("Optik kanalning sath diagrammasi", titleX, titleY);
-
-
+        g.drawString("WDM texnologiyali optik transport aloqa tarmog'i modeli", titleX, titleY);
     }
 
     private void drawTrapezoid(Graphics g, int x, int y, int width, int height, boolean isLeft) {
