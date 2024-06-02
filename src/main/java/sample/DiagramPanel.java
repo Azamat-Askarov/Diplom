@@ -7,9 +7,9 @@ import java.util.List;
 public class DiagramPanel extends JPanel {
     private List<Integer> amplifierDistances;
     private List<Double> noiseLevels;
-    private List<Integer> noisePowers;
+    private List<Double> noisePowers;
 
-    public DiagramPanel(List<Integer> amplifierDistances, List<Double> noiseLevels, List<Integer> noisePowers) {
+    public DiagramPanel(List<Integer> amplifierDistances, List<Double> noiseLevels, List<Double> noisePowers) {
         this.amplifierDistances = amplifierDistances;
         this.noiseLevels = noiseLevels;
         this.noisePowers = noisePowers;

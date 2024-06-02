@@ -106,7 +106,7 @@ public class Main extends JFrame {
         return resultPanel;
     }
 
-    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, int kchopAmplifier, List<Double> noiseLevels, List<Integer> noisePowers, int opticalChannelsNum) {
+    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, int kchopAmplifier, List<Double> noiseLevels, List<Double> noisePowers, int opticalChannelsNum) {
         resultArea.setText(results);
 
         // Remove old "Diagramma" tab if it exists

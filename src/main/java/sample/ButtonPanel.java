@@ -88,7 +88,7 @@ public class ButtonPanel extends JPanel {
         add(suggestedValuesComboBox2, gbc);
 
         // "Kuchaytirish masofasi" uchun kiritilishi kerak bo'lgan qiymatlar ro'yxati
-        String[] networkLengthSuggestion = {"250", "300", "350", "400", "450", "500", "550", "600", "640"};
+        String[] networkLengthSuggestion = {"360","640"};
         JComboBox<String> suggestedValuesComboBox3 = new JComboBox<>(networkLengthSuggestion);
         suggestedValuesComboBox3.addActionListener(new ActionListener() {
             @Override
@@ -172,12 +172,18 @@ public class ButtonPanel extends JPanel {
         int amplifierNum = amplifierList.size();
         List<Double> shovqinSathiList = new ArrayList<>();
         for (int i = 0; i < amplifierNum; i++) {
-            shovqinSathiList.add(amplifierList.get(i) * alfaEkv - 63);
+            shovqinSathiList.add(multiplexerPower-((amplifierList.get(i) * alfaEkv)+1));
         }
-        List<Integer> shovqinQuvvatiList = new ArrayList<>();
+        List<Double> shovqinQuvvatiList = new ArrayList<>();
         for (int i = 0; i < amplifierNum; i++) {
-            shovqinQuvvatiList.add((int) Math.floor(Math.pow(10, shovqinSathiList.get(i) / 10) / Math.pow(10, -6)));
+            shovqinQuvvatiList.add(Math.pow(10, shovqinSathiList.get(i) / 10)/Math.pow(10,-6));
         }
+        List<Double>shovqinHimoyaList = new ArrayList<>();
+        for (int i = 0; i <amplifierNum; i++) {
+            shovqinHimoyaList.add(shovqinSathiList.get(i)+52);
+        }
+
+
         // O'zgaruvchilarni asosiy oynaga chiqarish
         String result = String.format(
                 " So'nish koeffitsiyentining ekvivalent qiymati:  %.2f dB/km\n" +
@@ -193,11 +199,26 @@ public class ButtonPanel extends JPanel {
         }
         result += " Kuchaytirgichlarning shovqin sathlari (dBq)\n";
         for (int i = 0; i < amplifierNum; i++) {
-            result += " " + (i + 1) + ") " + shovqinSathiList.get(i) + "\n";
+            // result += " " + (i + 1) + ") " + shovqinSathiList.get(i) + "\n";
+            result += String.format(
+                    " " + (i + 1) + ") %.2f\n",
+                    shovqinSathiList.get(i)
+            );
         }
         result += " Kuchaytirgichlarning shovqin quvvati (nVt)\n";
         for (int i = 0; i < amplifierNum; i++) {
-            result += " " + (i + 1) + ") " + shovqinQuvvatiList.get(i) + "\n";
+            // result += " " + (i + 1) + ") " + shovqinQuvvatiList.get(i) + "\n";
+            result += String.format(
+                    " " + (i + 1) + ") %.2f\n",
+                    shovqinQuvvatiList.get(i)
+            );
+        }
+        result+=" Kuchaytirish uchastkalaridagi shovqindan himoyalanganlik (dB)\n";
+        for (int i = 0; i <amplifierNum; i++) {
+            result += String.format(
+                    " " + (i + 1) + ") %.2f\n",
+                    shovqinHimoyaList.get(i)
+            );
         }
         mainFrame.displaySimulationResults(networkLength, kchopLength, result, amplifierList, kuchaytirgichlarSoni1 + 1, shovqinSathiList, shovqinQuvvatiList,channelsNum); // Natijalarni asosiy oynada ko'rsatish
     }
