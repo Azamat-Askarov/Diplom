@@ -106,7 +106,7 @@ public class Main extends JFrame {
         return resultPanel;
     }
 
-    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, int kchopAmplifier, List<Double> noiseLevels, List<Double> noisePowers, int opticalChannelsNum) {
+    public void displaySimulationResults(int networkLength, int kchopLength, String results, List<Integer> amplifierDistances, int kchopAmplifier, List<Double> noiseLevels, List<Double> noisePowers, int opticalChannelsNum,double multiplexerPower) {
         resultArea.setText(results);
 
         // Remove old "Diagramma" tab if it exists
@@ -115,16 +115,16 @@ public class Main extends JFrame {
             tabbedPane.removeTabAt(diagramIndex);
         }
         // Add new "Diagramma" tab
-        DiagramPanel diagramPanel = new DiagramPanel(amplifierDistances, noiseLevels, noisePowers);
+        DiagramPanel diagramPanel = new DiagramPanel(amplifierDistances, noiseLevels, noisePowers,multiplexerPower);
         tabbedPane.addTab("Diagramma", diagramPanel);
 
-        // Remove old "Sxema" tab if it exists
-        int schemeIndex = tabbedPane.indexOfTab("Sxema");
+        // Remove old "Model" tab if it exists
+        int schemeIndex = tabbedPane.indexOfTab("Model");
         if (schemeIndex != -1) {
             tabbedPane.removeTabAt(schemeIndex);
         }
-        // Add new "Sxema" tab
+        // Add new "Model" tab
         SchemePanel drawScheme = new SchemePanel(amplifierDistances, networkLength, kchopLength, kchopAmplifier, opticalChannelsNum);
-        tabbedPane.addTab("Sxema", drawScheme);
+        tabbedPane.addTab("Model", drawScheme);
     }
 }

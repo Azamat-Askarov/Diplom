@@ -220,6 +220,6 @@ public class ButtonPanel extends JPanel {
                     shovqinHimoyaList.get(i)
             );
         }
-        mainFrame.displaySimulationResults(networkLength, kchopLength, result, amplifierList, kuchaytirgichlarSoni1 + 1, shovqinSathiList, shovqinQuvvatiList,channelsNum); // Natijalarni asosiy oynada ko'rsatish
+        mainFrame.displaySimulationResults(networkLength, kchopLength, result, amplifierList, kuchaytirgichlarSoni1 + 1, shovqinSathiList, shovqinQuvvatiList,channelsNum,multiplexerPower); // Natijalarni asosiy oynada ko'rsatish
     }
 }

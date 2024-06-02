@@ -70,6 +70,15 @@ public class SchemePanel extends JPanel implements MouseWheelListener {
             drawKchop(g, kchopX - 23, lineY - 45, rectWidth / 2, kchopHeight); // Aylanakchopni chizish
             g.drawString("K.CH.O.P", kchopX - 40, lineY + 50);
         }
+        // Set font for the title
+        g.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+        FontMetrics fm = g.getFontMetrics();
+        int titleWidth = fm.stringWidth("Optik kanalning sath diagrammasi");
+        // Draw the title
+        int titleX = (width - titleWidth) / 2;
+        int titleY =fm.getHeight() + 10;
+        g.drawString("Optik kanalning sath diagrammasi", titleX, titleY);
+
 
     }
 
