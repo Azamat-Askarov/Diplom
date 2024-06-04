@@ -74,7 +74,7 @@ public class ButtonPanel extends JPanel {
         add(suggestedValuesComboBox, gbc);
 
         // "Tolaning so'nish koeffitsiyenti" uchun kiritilishi kerak bo'lgan qiymatlar ro'yxati
-        String[] suggestedValues = {"0.2", "0.21", "0.22", "0.23", "0.24", "0.25", "0.26"};
+        String[] suggestedValues = {"0.19","0.2", "0.21", "0.22", "0.23", "0.24", "0.25"};
         JComboBox<String> suggestedValuesComboBox2 = new JComboBox<>(suggestedValues);
         suggestedValuesComboBox2.addActionListener(new ActionListener() {
             @Override
@@ -88,7 +88,7 @@ public class ButtonPanel extends JPanel {
         add(suggestedValuesComboBox2, gbc);
 
         // "Kuchaytirish masofasi" uchun kiritilishi kerak bo'lgan qiymatlar ro'yxati
-        String[] networkLengthSuggestion = {"360","640"};
+        String[] networkLengthSuggestion = {"360","400","500","600","640"};
         JComboBox<String> suggestedValuesComboBox3 = new JComboBox<>(networkLengthSuggestion);
         suggestedValuesComboBox3.addActionListener(new ActionListener() {
             @Override
@@ -100,6 +100,21 @@ public class ButtonPanel extends JPanel {
         gbc.gridx = 2;
         gbc.gridy = 0;
         add(suggestedValuesComboBox3, gbc);
+
+        // "Kabel qurillish uzunligi" uchun kiritilishi kerak bo'lgan qiymatlar ro'yxati
+        String[] cableLengthSuggestion = {"2","4","6","8"};
+        JComboBox<String> suggestedValuesComboBox4 = new JComboBox<>(cableLengthSuggestion);
+        suggestedValuesComboBox4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedValue = (String) suggestedValuesComboBox4.getSelectedItem();
+                cableLengthField.setText(selectedValue);
+            }
+        });
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        add(suggestedValuesComboBox4, gbc);
+
     }
 
     private void addSimulateButton(GridBagConstraints gbc) {
